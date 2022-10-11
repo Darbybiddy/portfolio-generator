@@ -8,14 +8,48 @@ const promptUser = () => {
       type: "input",
       name: "name",
       message: "What is your name?",
+      validate: (nameInput) => {
+        if (nameInput) {
+          return true;
+        } else {
+          console.log("please enter your name");
+          return false;
+        }
+      },
     },
 
     {
       type: "input",
       name: "github",
       message: "What is your Github Username?",
+      validate: (nameInput) => {
+        if (nameInput) {
+          return true;
+        } else {
+          console.log("please enter your name");
+          return false;
+        }
+      },
     },
-
+    {
+      type: "confirm",
+      name: "confirmAbout",
+      message:
+        "would you like to enter some information about yourself for an About section?",
+      default: true,
+    },
+    {
+      type: "input",
+      name: "about",
+      message: "Provide some information about yourself:",
+      when: ({ confirmAbout }) => {
+        if (confirmAbout) {
+          return true;
+        } else {
+          return false;
+        }
+      },
+    },
     {
       type: "input",
       name: "about",
@@ -33,83 +67,93 @@ const promptProject = (portfolioData) => {
 
   // If there's no 'projects' array property, create one
   if (!portfolioData.projects) {
-  portfolioData.projects = [];
+    portfolioData.projects = [];
   }
 
-  return inquirer.prompt([
-    {
-      type: "input",
-      name: "name",
-      message: "what is the name of your project?",
-    },
+  return inquirer
+    .prompt([
+      {
+        type: "input",
+        name: "name",
+        message: "what is the name of your project?",
+        validate: (nameInput) => {
+          if (nameInput) {
+            return true;
+          } else {
+            console.log("please enter your name");
+            return false;
+          }
+        },
+      },
 
-    {
-      type: "input",
-      name: "description",
-      message: "provide a description of the project (required)",
-    },
+      {
+        type: "input",
+        name: "description",
+        message: "provide a description of the project (required)",
+        validate: (nameInput) => {
+          if (nameInput) {
+            return true;
+          } else {
+            console.log("please enter a description");
+            return false;
+          }
+        },
+      },
 
-    {
-      type: "checkbox",
-      name: "languages",
-      message: "What did you build this project with? (check all that apply)",
-      choices: [
-        "JavaScript",
-        "HTML",
-        "CSS",
-        "ES6",
-        "jQuery",
-        "Bootstrap",
-        "Node",
-      ],
-    },
+      {
+        type: "checkbox",
+        name: "languages",
+        message: "What did you build this project with? (check all that apply)",
+        choices: [
+          "JavaScript",
+          "HTML",
+          "CSS",
+          "ES6",
+          "jQuery",
+          "Bootstrap",
+          "Node",
+        ],
+      },
 
-    {
-      type: "input",
-      name: "link",
-      message: "enter the Github link to your project. (Required)",
-    },
+      {
+        type: "input",
+        name: "link",
+        message: "enter the Github link to your project. (Required)",
+        validate: (nameInput) => {
+          if (nameInput) {
+            return true;
+          } else {
+            console.log("please enter your link");
+            return false;
+          }
+        },
+      },
 
-    {
-      type: "confirm",
-      name: "feature",
-      message: "would you like to feature this project?",
-      default: false,
-    },
+      {
+        type: "confirm",
+        name: "feature",
+        message: "would you like to feature this project?",
+        default: false,
+      },
 
-    {
-      type: "confirm",
-      name: "confirmAddProject",
-      message: "would you like to enter another project?",
-      default: false,
-    },
-  ])
-  .then(projectData => {
-    portfolioData.projects.push(projectData);
-    if (projectData.confirmAddProject) {
-      return promptProject(portfolioData);
-    } else {
-      return portfolioData;
-    }
-  });
+      {
+        type: "confirm",
+        name: "confirmAddProject",
+        message: "would you like to enter another project?",
+        default: false,
+      },
+    ])
+    .then((projectData) => {
+      portfolioData.projects.push(projectData);
+      if (projectData.confirmAddProject) {
+        return promptProject(portfolioData);
+      } else {
+        return portfolioData;
+      }
+    });
 };
 promptUser()
   .then(promptProject)
-  .then(portfolioData => {
-    console.log(portfolioData)
-  })
-
-// // const profileDataArgs = process.argv.slice(2);
-// // //const name = profileDataArgs[0] lines 2 and 3 are a different way of writing line 4, but is the same thing
-// // //const github = profileDataArgs[1]
-// // const [name, github] = profileDataArgs
-
-// const pageHTML = generatePage(name, github)
-// // the first thing in the argument is going to be the file name, (index.html)
-// //the second argument is the data thats being written (generatePage)(everything that is in the generatepage function)
-// // the third argument is the callback funtion that handles any errors and success messages.
-// fs.writeFile('index.html',pageHTML, err =>{
-//   if (err)throw err
-
-// console.log('portfolio complete! checkout index.html to see the output!');
-// })
+  .then((portfolioData) => {
+    console.log(portfolioData);
+  });
