@@ -1,6 +1,6 @@
 const inquirer = require("inquirer");
-const fs = require("fs");
-const generatePage = require("./src/page-template");
+const generateSite = require('./utils/generate-site.js')
+const generatePage = require("../src/page-template");
 
 const promptUser = () => {
   return inquirer.prompt([
@@ -151,17 +151,51 @@ const promptProject = (portfolioData) => {
       }
     });
 };
+//use promises to right the callback functions
 promptUser()
-  .then(promptProject)
-  .then((portfolioData) => {
+.then(promptProject)
+.then(portfolioData =>{
+  return generatePage(portfolioData)
+})
 
-    const pageHTML = generatePage(portfolioData);
+.then(pageHTML =>{
+  return writeFile(pageHTML)
+})
 
-    fs.writeFile("./index.html", pageHTML, (err) => {
-      if (err) throw new Error(err);
+.then(writeFileResponse =>{
+  console.log(writeFileResponse)
+  return copyFile()
+})
 
-      console.log(
-        "Page created! Check out index.html in this directory to see it!"
-      );
-    });
-  });
+.then(copyFileResponse => {
+  console.log(copyFileResponse)
+})
+
+.catch(err => {
+  console.log(err)
+})
+
+
+// this is a callback function inside of a callback funtion inside of a callback function. (dont do this!)
+// promptUser()
+//   .then(promptProject)
+//   .then(portfolioData => {
+
+//     const pageHTML = generatePage(portfolioData);
+
+//     fs.writeFile('./dist/index.html', pageHTML, err => {
+//       if (err) {
+//         console.log(err);
+//         return;
+//       }
+//       console.log('Page created! Check out index.html in this directory to see it!');
+    
+//       fs.copyFile('./src/style.css', './dist/style.css', err => {
+//         if (err) {
+//           console.log(err);
+//           return;
+//         }
+//         console.log('Style sheet copied successfully!');
+//       });
+//     })
+//   });
