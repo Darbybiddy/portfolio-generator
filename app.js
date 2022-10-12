@@ -70,8 +70,7 @@ const promptProject = (portfolioData) => {
     portfolioData.projects = [];
   }
 
-  return inquirer
-    .prompt([
+  return inquirer.prompt([
       {
         type: "input",
         name: "name",
